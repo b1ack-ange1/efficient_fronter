@@ -49,18 +49,19 @@ public class EfficientFronter implements Serializable {
             EntryData ed = new EntryData(x, y, stat.getGeometricMean() - 100, stat.getStandardDeviation());
             list.add(ed);
             JSONObject ob = new JSONObject();
-            ob.put("y", stat.getGeometricMean());
+            ob.put("y", stat.getGeometricMean() - 100);
             ob.put("x", stat.getStandardDeviation());
             ob.put("value", "stocks: " + x + ", dep: " + y);
-            ob.put("y2", statMG.getGeometricMean());
+            ob.put("y2", statMG.getGeometricMean() - 100);
             ob.put("x2", statMG.getStandardDeviation());
             ob.put("value2", "stocks: " + x + ", gold: " + y);
-            ob.put("y3", statDG.getGeometricMean());
+            ob.put("y3", statDG.getGeometricMean() - 100);
             ob.put("x3", statDG.getStandardDeviation());
-            ob.put("value3", "stocks: " + x + ", gold: " + y);
+            ob.put("value3", "dep: " + x + ", gold: " + y);
             array.add(ob);
         }
         json = array.toJSONString();
+        System.out.println(json);
     }
 
     private double[] calculateArray(List<Double> list1, List<Double> list2, double share1, double share2) {
