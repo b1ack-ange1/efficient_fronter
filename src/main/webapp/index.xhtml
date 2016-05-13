@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Efficient fronter demo</title>
         <h:outputScript name="amcharts/amcharts.js"/>
@@ -9,60 +11,107 @@
         <h:outputScript name="amcharts/themes/light.js"/>
     </h:head>
     <h:body>
-        <h:form>
-            <script type="text/javascript">
-                var data = '<h:outputText value="#{efficientFronter.json}" escape="false"/>';
-                var chart = AmCharts.makeChart("chartdiv", {
-                    "type": "xy",
-                    "theme": "light",
-                    "balloon": {
-                        "fixedPosition": true
-                    },
-                    "dataProvider": JSON.parse(data),
-                    "startDuration": 1.5,
-                    "graphs": [{
-                            "balloonText": "Доходность:<b>[[x]]</b> Риск:<b>[[y]]</b><br></br>value:<b>[[value]]</b>",
-                            "bullet": "circle",
-                            "bulletBorderAlpha": 0.2,
-                            "bulletAlpha": 0.8,
-                            "lineAlpha": 0,
-                            "fillAlphas": 0,
-                            "valueField": "value",
-                            "xField": "x",
-                            "yField": "y",
-                            "maxBulletSize": 100
-                        }, {
-                            "balloonText": "Доходность:<b>[[x2]]</b> Риск:<b>[[y2]]</b><br></br>value:<b>[[value2]]</b>",
-                            "bullet": "circle",
-                            "bulletBorderAlpha": 0.2,
-                            "bulletAlpha": 0.8,
-                            "lineAlpha": 0,
-                            "fillAlphas": 0,
-                            "valueField": "value2",
-                            "xField": "x2",
-                            "yField": "y2",
-                            "maxBulletSize": 100
+        <h:form id="form" prependId="false">
+            <p:growl autoUpdate="true" />
+            <div class="ui-fluid">
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="console" value="Basic:" />
+                    <p:selectOneMenu id="console" value="#{efficientFronter.type}" style="width:125px">
+                        <f:selectItems value="#{efficientFronter.listTypes}" var="type" itemLabel="#{type.desc}" itemValue="#{type}" />
+                        <p:ajax event="change" process="@this"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="console" value="Basic:" />
+                    <p:selectOneMenu id="console1" value="#{efficientFronter.type1}" style="width:125px">
+                        <f:selectItems value="#{efficientFronter.listTypes}" var="type" itemLabel="#{type.desc}" itemValue="#{type}" />
+                        <p:ajax event="change" process="@this"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="console" value="Basic:" />
+                    <p:selectOneMenu id="console2" value="#{efficientFronter.entityMap['2']}" style="width:125px">
+                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{efficientFronter.listTypes}" var="type" itemLabel="#{type.desc}" itemValue="#{type}" />
+                        <p:ajax event="change" process="@this" update="console console1"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="console" value="Basic:" />
+                    <p:selectOneMenu id="console3" value="#{efficientFronter.entityMap['3']}" style="width:125px">
+                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{efficientFronter.listTypes}" var="type" itemLabel="#{type.desc}" itemValue="#{type}"/>
+                        <p:ajax event="change" process="@this" update="console console1"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton value="Построить" process="@all" actionListener="#{efficientFronter.calculate()}" update="chart"/>
+            </div>
+            <p:panel id="chart">
+                <script type="text/javascript">
+                    var data = '<h:outputText value="#{efficientFronter.json}" escape="false"/>';
+                    var chart = AmCharts.makeChart("chartdiv", {
+                        "type": "xy",
+                        "theme": "light",
+                        "balloon": {
+                            "fixedPosition": true
                         },
-                        {
-                            "balloonText": "Доходность:<b>[[x]]</b> Риск:<b>[[y]]</b><br></br>value:<b>[[value]]</b>",
-                            "bullet": "circle",
-                            "bulletBorderAlpha": 0.2,
-                            "bulletAlpha": 0.8,
-                            "lineAlpha": 0,
-                            "fillAlphas": 0,
-                            "valueField": "value3",
-                            "xField": "x3",
-                            "yField": "y3",
-                            "maxBulletSize": 100
-                        }],
-                    "marginLeft": 46,
-                    "marginBottom": 35,
-                    "export": {
-                        "enabled": true
-                    }
-                });
-            </script>
-            <div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+                        "dataProvider": JSON.parse(data),
+                        "startDuration": 1.5,
+                        "graphs": [{
+                                "balloonText": "Доходность:<b>[[x]]</b> Риск:<b>[[y]]</b><br></br>value:<b>[[value]]</b>",
+                                "bullet": "circle",
+                                "bulletBorderAlpha": 0.2,
+                                "bulletAlpha": 0.8,
+                                "lineAlpha": 0,
+                                "fillAlphas": 0,
+                                "valueField": "value",
+                                "xField": "x0",
+                                "yField": "y0",
+                                "maxBulletSize": 100
+                            }, {
+                                "balloonText": "Доходность:<b>[[x2]]</b> Риск:<b>[[y2]]</b><br></br>value:<b>[[value2]]</b>",
+                                "bullet": "circle",
+                                "bulletBorderAlpha": 0.2,
+                                "bulletAlpha": 0.8,
+                                "lineAlpha": 0,
+                                "fillAlphas": 0,
+                                "valueField": "value2",
+                                "xField": "x1",
+                                "yField": "y1",
+                                "maxBulletSize": 100
+                            },
+                            {
+                                "balloonText": "Доходность:<b>[[x]]</b> Риск:<b>[[y]]</b><br></br>value:<b>[[value]]</b>",
+                                "bullet": "circle",
+                                "bulletBorderAlpha": 0.2,
+                                "bulletAlpha": 0.8,
+                                "lineAlpha": 0,
+                                "fillAlphas": 0,
+                                "valueField": "value3",
+                                "xField": "x2",
+                                "yField": "y2",
+                                "maxBulletSize": 100
+                            }],
+                        "marginLeft": 46,
+                        "marginBottom": 35,
+                        "export": {
+                            "enabled": true
+                        }
+                    });
+                </script>
+                <div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+            </p:panel>
+
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:dataTable value="#{efficientFronter.list}" var="line">
+                    <f:facet name="header">
+                        <h:outputText value="Расчетные данные"/>
+                    </f:facet>
+                    <p:column headerText="N">
+                        <h:outputText value="#{line.x}"/>
+                    </p:column>
+                    <p:column headerText="Доходность" >
+                        <h:outputText value="#{line.v1}"/>
+                    </p:column>
+                    <p:column headerText="Риск">
+                        <h:outputText value="#{line.v2}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
         </h:form>
     </h:body>
 </html>
